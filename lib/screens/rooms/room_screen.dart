@@ -44,7 +44,7 @@ class _RoomScreenState extends State<RoomScreen> {
         centerTitle: true,
         actions: [
           IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const RoomFAmily()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => RoomFamily(widget.id.toString())));
           }, icon: const Icon(Icons.person),),
         ],
       ),
