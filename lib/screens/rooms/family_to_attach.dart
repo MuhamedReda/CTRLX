@@ -5,7 +5,6 @@ import 'package:ctrlx/data/models/family_member.dart';
 import 'package:ctrlx/widgets/attached_user_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FamilyToAttach extends StatefulWidget {

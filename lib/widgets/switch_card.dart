@@ -42,7 +42,6 @@ class _SwitchCardState extends State<SwitchCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: (screenWidth(context) / 2) * 1.5,
       height: screenHeigh(context),
       margin: const EdgeInsets.only(left: 20),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -52,29 +51,34 @@ class _SwitchCardState extends State<SwitchCard> {
       ),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.name!,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                width: 30,
-                height: 30,
-                child: IconButton(
-                  alignment: Alignment.center,
-                  splashRadius: 20,
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.timer,
+          SizedBox(
+            width: widget.sub_3 != null ? (60 * 3) + 50 : widget.sub_2 != null ? (60 * 2) + 25 : 120,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.name!,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: IconButton(
+                    alignment: Alignment.center,
+                    splashRadius: 20,
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.timer,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           Expanded(
             child: Row(
@@ -109,7 +113,8 @@ class _SwitchCardState extends State<SwitchCard> {
                     ),
                   ],
                 ),
-                Column(
+                widget.sub_2 != null ? const SizedBox(width: 25,) : const SizedBox(),
+                widget.sub_2 != null ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(widget.sub_2!),
@@ -137,8 +142,9 @@ class _SwitchCardState extends State<SwitchCard> {
                       ),
                     ),
                   ],
-                ),
-                Column(
+                ) : const SizedBox(),
+                widget.sub_3 != null ? const SizedBox(width: 25,) : const SizedBox(),
+                widget.sub_3 != null ? Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(widget.sub_3!),
@@ -166,7 +172,7 @@ class _SwitchCardState extends State<SwitchCard> {
                       ),
                     ),
                   ],
-                ),
+                ):SizedBox(),
               ],
             ),
           ),

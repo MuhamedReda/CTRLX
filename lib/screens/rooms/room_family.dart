@@ -1,3 +1,4 @@
+import 'package:ctrlx/blocs/family_bloc/bloc/family_bloc.dart';
 import 'package:ctrlx/blocs/room_family/roomfamily_bloc.dart';
 import 'package:ctrlx/consts/colors.dart';
 import 'package:ctrlx/data/models/family_member.dart';
@@ -18,8 +19,13 @@ class RoomFamily extends StatefulWidget {
 class _RoomFamilyState extends State<RoomFamily> {
   RoomfamilyBloc? roomfamilyBloc;
   List<FamilyMember> family = [];
+
+  
+  FamilyBloc? familyBloc;
+
   @override
   void initState() {
+    familyBloc = BlocProvider.of<FamilyBloc>(context);
     roomfamilyBloc = BlocProvider.of<RoomfamilyBloc>(context);
     roomfamilyBloc!.add(GetRoomFamily(widget.roomId));
     super.initState();
@@ -33,9 +39,15 @@ class _RoomFamilyState extends State<RoomFamily> {
         backgroundColor: myColor,
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: ((context) => FamilyToAttach(family , widget.roomId))));
-          }, icon: const Icon(Icons.add)),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: ((context) =>
+                            FamilyToAttach(family, widget.roomId))));
+              },
+              icon: const Icon(Icons.add)),
         ],
       ),
       body: BlocBuilder<RoomfamilyBloc, RoomfamilyState>(
@@ -59,7 +71,7 @@ class _RoomFamilyState extends State<RoomFamily> {
                 child: Text("There Are No Users For This Room"),
               );
             } else {
-              family.addAll(state.family);
+              family = state.family ;
               return ListView.builder(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
@@ -110,7 +122,16 @@ class _RoomFamilyState extends State<RoomFamily> {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      roomfamilyBloc!.add(DeAttachUserToRoom(
+                                          widget.roomId,
+                                          state.family[index].id.toString()));
+                                      
+                                      roomfamilyBloc!
+                                          .add(GetRoomFamily(widget.roomId));
+                                      familyBloc!.add(GetFamily());
+                                    },
                                     child: const Text("Confirm"),
                                   ),
                                 ],

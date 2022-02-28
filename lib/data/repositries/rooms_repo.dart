@@ -15,6 +15,7 @@ abstract class RoomsRepo {
   Future<void> deleteRoom(String id);
   Future<List<FamilyMember>> getRoomFamily(String id);
   Future attachUserToRoom(String roomId, String userId);
+  Future deAttachUserToRoom(String roomId, String userId);
 }
 
 class RoomsRepoImplementation extends RoomsRepo {
@@ -73,6 +74,22 @@ class RoomsRepoImplementation extends RoomsRepo {
 
   @override
   Future attachUserToRoom(String roomId, String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("token");
+    await http.post(
+      Uri.parse("http://control-x-co.com/api/AttachRoomToUser"),
+      headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+      body: {
+        'room_id': roomId,
+        'user_id': userId,
+      },
+    );
+  }
+  
+  @override
+  Future deAttachUserToRoom(String roomId, String userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http.post(

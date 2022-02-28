@@ -8,30 +8,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SwitchRepo {
   Future<List<Switch>> getSwitches(int roomId);
-  Future attachSwitchToRoom(String roomId , String serial , String deviceName , String sub_1 , String sub_2 , String sub_3 );
+  Future attachSwitchToRoom(String? roomId , String? serial ,  String? deviceName , String? type ,String? sub_1 , String? sub_2 , String? sub_3 );
   Future changeState(String? statename , int? currentState , String? serial);
   Future<List<Switch>> getActiveSwitches();
 }
 
 class SwitchesRepoImplementation extends SwitchRepo {
   @override
-  Future attachSwitchToRoom(String roomId , String serial , String deviceName , String sub_1 , String sub_2 , String sub_3) async {
+  Future attachSwitchToRoom(String? roomId , String? serial , String? deviceName ,  String? type , String? sub_1 , String? sub_2 , String? sub_3) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
-    await http.post(
+    var data =await http.post(
       Uri.parse("http://control-x-co.com/api/AttachSwitchToRoom"),
       body:{
         'room_id' : roomId,
         'serial' : serial,
         'device_name' : deviceName,
-        'sub_1' : sub_1,
-        'sub_2' : sub_2,
-        'sub_3' : sub_3,
+        'type' : type ,
+        'sub_1' : sub_1 ?? "",
+        'sub_2' : sub_2 ?? "" ,
+        'sub_3' : sub_3 ?? "",
       },
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
     );
+    var res = convert.jsonDecode(data.body);
+    if(res['error'] != null){
+      return false;
+    }else{
+      return true;
+    }
   }
 
   @override

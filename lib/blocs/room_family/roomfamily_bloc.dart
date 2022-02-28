@@ -31,6 +31,12 @@ class RoomfamilyBloc extends Bloc<RoomfamilyEvent, RoomfamilyState> {
       }catch(e){
         //yield AttachUserToRoomErorrState();
       }
+    }else if(event is DeAttachUserToRoom){
+      try{
+        await roomsRepo.deAttachUserToRoom(event.roomId, event.userId);
+      }catch(e){
+        //000
+      }
     }
   }
 

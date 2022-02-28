@@ -5,6 +5,7 @@ import 'package:ctrlx/blocs/room_blocs/bloc/room_bloc.dart';
 import 'package:ctrlx/blocs/switch_bloc/bloc/switch_bloc.dart';
 import 'package:ctrlx/consts/colors.dart';
 import 'package:ctrlx/consts/sizes.dart';
+import 'package:ctrlx/screens/rooms/add_switch.dart';
 import 'package:ctrlx/screens/rooms/room_family.dart';
 import 'package:ctrlx/widgets/switch_card.dart';
 import 'package:flutter/material.dart';
@@ -104,25 +105,30 @@ class _RoomScreenState extends State<RoomScreen> {
                       if (state.switches.isNotEmpty) {
                         return Row(
                           children: [
-                            Container(
-                              width: 100,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.7),
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              margin: const EdgeInsets.only(left: 15),
-                              child: Center(
-                                child: Container(
-                                  width: 60,
-                                  height: 60,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.8),
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-
-                                  child: const Center(
-                                    child: Icon(Icons.add),
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => AddSwitchForm(widget.id.toString())));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                margin: const EdgeInsets.only(left: 15),
+                                child: Center(
+                                  child: Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.8),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                            
+                                    child: const Center(
+                                      child: Icon(Icons.add),
+                                    ),
                                   ),
                                 ),
                               ),

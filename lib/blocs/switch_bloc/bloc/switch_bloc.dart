@@ -28,6 +28,18 @@ class SwitchBloc extends Bloc<SwitchEvent, SwitchState> {
       yield GetActiveSwitchesLoadingState();
       var data = await switchRepo!.getActiveSwitches();
       yield GetActiveSwitchesLoadedState(data);
+    }else if(event is AttachSwitchToRoom){
+      yield AttachSwitchToRoomLoadingState();
+      try{
+        var res = await switchRepo!.attachSwitchToRoom(event.roomId, event.serial, event.deviceName, event.type, event.sub_1, event.sub_2, event.sub_3);
+        if(res){
+          yield AttachSwitchToRoomLoadedState();
+        }else{
+          yield AttachSwitchToRoomErorrState("Wrong Serial number");  
+        }
+      }catch(e){
+        yield AttachSwitchToRoomErorrState("Wrong Serial number");
+      }
     }
   }
 }

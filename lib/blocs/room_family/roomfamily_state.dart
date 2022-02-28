@@ -20,3 +20,10 @@ class GetRoomFamilyErorrState extends RoomfamilyState{
 class AttachUserToRoomLoadingState extends RoomfamilyState {}
 class AttachUserToRoomLoadedState extends RoomfamilyState {}
 class AttachUserToRoomErorrState extends RoomfamilyState {}
+
+
+class DeAttachUserToRoomLoadingState extends RoomfamilyState {}
+class DeAttachUserToRoomLoadedState extends RoomfamilyState {}
+class DeAttachUserToRoomErorrState extends RoomfamilyState {}
+
+

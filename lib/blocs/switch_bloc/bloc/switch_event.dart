@@ -9,13 +9,14 @@ class GetRoomSwitches extends SwitchEvent {
 }
 
 class AttachSwitchToRoom extends SwitchEvent {
-  final String roomId;
-  final String serial;
-  final String deviceName;
-  final String sub_1;
-  final String sub_2;
-  final String sub_3;
-  AttachSwitchToRoom(this.roomId, this.serial, this.deviceName, this.sub_1, this.sub_2, this.sub_3);
+  final String? roomId;
+  final String? serial;
+  final String? deviceName;
+  final String? type ;
+  final String? sub_1;
+  final String? sub_2;
+  final String? sub_3;
+  AttachSwitchToRoom(this.roomId, this.serial, this.deviceName, this.type, this.sub_1, this.sub_2, this.sub_3);
 }
 
 class ChangeSwitchState extends SwitchEvent{
