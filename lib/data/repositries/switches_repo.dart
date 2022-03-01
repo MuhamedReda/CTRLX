@@ -81,4 +81,6 @@ class SwitchesRepoImplementation extends SwitchRepo {
     var data = convert.jsonDecode(response.body);
     return data.map<Switch>((item) => Switch.fromJson(item)).toList();
   }
+
+  
 }

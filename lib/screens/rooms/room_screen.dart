@@ -151,6 +151,7 @@ class _RoomScreenState extends State<RoomScreen> {
                                     state.switches[index].state1,
                                     state.switches[index].state2,
                                     state.switches[index].state3,
+                                    widget.id,
                                   );
                                 },
                               ),
