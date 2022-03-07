@@ -4,6 +4,7 @@ import 'package:ctrlx/consts/sizes.dart';
 import 'package:ctrlx/widgets/offline_Switch_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AllOfflineSwitches extends StatefulWidget {
   const AllOfflineSwitches({Key? key}) : super(key: key);
@@ -14,11 +15,20 @@ class AllOfflineSwitches extends StatefulWidget {
 
 class _AllOfflineSwitchesState extends State<AllOfflineSwitches> {
   OfflineBloc? offlineBloc;
+  List<String> names = [];
   @override
   void initState() {
+    getnamed();
     offlineBloc = BlocProvider.of<OfflineBloc>(context);
     offlineBloc!.add(GetOffline());
     super.initState();
+  }
+
+  getnamed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      names = prefs.getStringList("names")!;
+    });
   }
 
   @override
@@ -52,6 +62,18 @@ class _AllOfflineSwitchesState extends State<AllOfflineSwitches> {
                   padding: const EdgeInsets.all(20),
                   itemCount: state.switches.length,
                   itemBuilder: (context, index) {
+                    for (var x = 0; x < names.length; x++) {
+                      var name = names[x].split('-')[1];
+                      var serial = names[x].split('-')[0];
+                      if (serial == state.switches[index].serialNumber) {
+                        return OfflineSwitchCard(
+                            name,
+                            state.switches[index].serialNumber,
+                            state.switches[index].state1,
+                            state.switches[index].state2,
+                            state.switches[index].state3);
+                      }
+                    }
                     return OfflineSwitchCard(
                         state.switches[index].serialNumber,
                         state.switches[index].serialNumber,

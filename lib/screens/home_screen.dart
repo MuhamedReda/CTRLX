@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ctrlx/blocs/family_bloc/bloc/family_bloc.dart';
 import 'package:ctrlx/blocs/room_blocs/bloc/room_bloc.dart';
 import 'package:ctrlx/blocs/switch_bloc/bloc/switch_bloc.dart';
@@ -5,8 +7,10 @@ import 'package:ctrlx/consts/colors.dart';
 import 'package:ctrlx/consts/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 import '../widgets/switch_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -31,7 +35,25 @@ class _HomeScreenState extends State<HomeScreen> {
     roomBloc!.add(GetRooms());
     familyBloc = BlocProvider.of<FamilyBloc>(context);
     familyBloc!.add(GetFamily());
+    allSwitches();
     super.initState();
+  }
+
+  allSwitches() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("token");
+    http.Response response = await http.get(
+      Uri.parse("http://control-x-co.com/api/switches"),
+      headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    List<dynamic> data = convert.jsonDecode(response.body);
+    List<String> names = [];
+    for(var x = 0 ; x < data.length ; x++){
+      names.add("${data[x]['serial_number']}-${data[x]['name']}");
+    }
+    prefs.setStringList('names', names);
   }
 
   @override

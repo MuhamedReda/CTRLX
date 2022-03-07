@@ -40,7 +40,8 @@ class _OfflineScreenState extends State<OfflineScreen> {
         );
       },
     );
-    try {
+    if(homePassword.isNotEmpty && homePassword.length > 7){
+      try {
       await http.post(
         Uri.parse("http://192.168.4.1/setConnection"),
         body: {
@@ -65,6 +66,21 @@ class _OfflineScreenState extends State<OfflineScreen> {
               color: Colors.red,
             ),
             content: Text("Make Sure That You Connected To Master Wifi"),
+          );
+        },
+      );
+    }
+    }else{
+      Navigator.pop(context);
+      showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            title: Icon(
+              Icons.error,
+              color: Colors.red,
+            ),
+            content: Text("You Must Set Your home wifi to your muster to Change the connection to Online"),
           );
         },
       );

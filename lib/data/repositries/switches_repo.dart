@@ -11,6 +11,7 @@ abstract class SwitchRepo {
   Future attachSwitchToRoom(String? roomId , String? serial ,  String? deviceName , String? type ,String? sub_1 , String? sub_2 , String? sub_3 );
   Future changeState(String? statename , int? currentState , String? serial);
   Future<List<Switch>> getActiveSwitches();
+  Future allSwitches();
 }
 
 class SwitchesRepoImplementation extends SwitchRepo {
@@ -74,6 +75,20 @@ class SwitchesRepoImplementation extends SwitchRepo {
     var token = prefs.getString("token");
     http.Response response = await http.get(
       Uri.parse("http://control-x-co.com/api/GetActivatedSwitch"),
+      headers: {
+        HttpHeaders.authorizationHeader: "Bearer $token",
+      },
+    );
+    var data = convert.jsonDecode(response.body);
+    return data.map<Switch>((item) => Switch.fromJson(item)).toList();
+  }
+
+  @override
+  Future allSwitches() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString("token");
+    http.Response response = await http.get(
+      Uri.parse("http://control-x-co.com/api/switches"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },

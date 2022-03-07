@@ -1,7 +1,6 @@
 import 'package:ctrlx/blocs/auth_blocs/login/bloc/login_bloc.dart';
 import 'package:ctrlx/consts/colors.dart';
 import 'package:ctrlx/consts/sizes.dart';
-import 'package:ctrlx/screens/home_screen.dart';
 import 'package:ctrlx/screens/auth/register_screen.dart';
 import 'package:ctrlx/screens/root_app.dart';
 import 'package:flutter/material.dart';

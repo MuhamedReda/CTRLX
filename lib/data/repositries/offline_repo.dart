@@ -1,5 +1,4 @@
 import 'package:ctrlx/data/models/offline_switch.dart';
-import 'package:ctrlx/data/models/switch.dart';
 import 'package:http/http.dart' as http;
 
 import 'dart:convert' as convert;

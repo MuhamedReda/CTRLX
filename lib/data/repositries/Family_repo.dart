@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:ctrlx/data/models/family_member.dart';
 
 import 'package:http/http.dart' as http;
