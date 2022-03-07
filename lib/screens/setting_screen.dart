@@ -19,6 +19,14 @@ class SettingScreen extends StatefulWidget {
 class _SettingScreenState extends State<SettingScreen> {
   bool state = false;
 
+  Future changeConection(String connectionType) async {
+    setState(() {
+      state = !state;
+    });
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("connectionType", connectionType);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,11 +54,11 @@ class _SettingScreenState extends State<SettingScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  Text(
+                  const Text(
                     "Muhamed Reda",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  Text("Muhamed.reda@gmail.com"),
+                  const Text("Muhamed.reda@gmail.com"),
                   const SizedBox(
                     height: 15,
                   ),
@@ -67,28 +75,35 @@ class _SettingScreenState extends State<SettingScreen> {
                               builder: (context) => const LoginScreen()),
                           (route) => false);
                     },
-                    child: Container(
-                      width: 150,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          color: myColor,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          const Text(
-                            "Logout",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
+                    child: GestureDetector(
+                      onTap: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.clear();
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+                      },
+                      child: Container(
+                        width: 150,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: myColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            const Text(
+                              "Logout",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SvgPicture.asset(
-                            "assets/icons/logout.svg",
-                            color: Colors.white,
-                          )
-                        ],
+                            SvgPicture.asset(
+                              "assets/icons/logout.svg",
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -142,7 +157,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  Container(
+                  /* Container(
                     width: screenWidth(context),
                     height: 40,
                     padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -168,9 +183,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   ),
                   const SizedBox(
                     height: 15,
-                  ),
+                  ), */
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Share.share("Controle Your Smart Home");
                     },
                     child: Container(
@@ -213,25 +228,30 @@ class _SettingScreenState extends State<SettingScreen> {
                               width: 12,
                               height: 12,
                               decoration: BoxDecoration(
-                                color:state ? Colors.green : Colors.black12,
+                                color: state ? Colors.green : Colors.black12,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                             ),
                             const SizedBox(
                               width: 10,
                             ),
-                            Text("Offline Mode : ${state ? 'Active' : 'Disable'} "),
+                            Text(
+                                "Offline Mode : ${state ? 'Active' : 'Disable'} "),
                           ],
                         ),
                         CupertinoSwitch(
                           value: state,
                           onChanged: (v) {
-                            setState(() {
-                              state = v;
-                              if(v){
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const OfflineScreen()));
-                              }
-                            });
+                            changeConection("offline");
+                            state = v;
+                            if (v) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const OfflineScreen(),
+                                ),
+                              );
+                            }
                           },
                           activeColor: myColor,
                         ),

@@ -26,8 +26,12 @@ class SwitchBloc extends Bloc<SwitchEvent, SwitchState> {
         await switchRepo!.changeState(event.state, event.currentState, event.serial);
     }else if(event is GetActiveSwitches){
       yield GetActiveSwitchesLoadingState();
-      var data = await switchRepo!.getActiveSwitches();
-      yield GetActiveSwitchesLoadedState(data);
+      try{
+        var data = await switchRepo!.getActiveSwitches();
+        yield GetActiveSwitchesLoadedState(data);
+      }catch(e){
+        print(e);
+      }
     }else if(event is AttachSwitchToRoom){
       yield AttachSwitchToRoomLoadingState();
       try{

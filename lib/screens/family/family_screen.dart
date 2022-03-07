@@ -46,7 +46,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
             },
           );
         } else if (state is DeleteFamilyLoaded) {
-          familyBloc!.add(GetFamily());    
+          familyBloc!.add(GetFamily());
           Navigator.pop(context);
           showDialog(
             context: context,
@@ -71,7 +71,10 @@ class _FamilyScreenState extends State<FamilyScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const AddFamilyMember()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const AddFamilyMember()));
           },
           child: const Icon(Icons.add),
           backgroundColor: myColor,
@@ -93,19 +96,25 @@ class _FamilyScreenState extends State<FamilyScreen> {
               );
             } else if (state is GetFamilyLoaded) {
               if (state.family.isNotEmpty) {
-                return ListView.builder(
-                  padding: const EdgeInsets.all(15),
-                  itemCount: state.family.length,
-                  itemBuilder: (context, index) {
-                    return FamilyMemberCard(
-                      state.family[index].id,
-                      state.family[index].name,
-                      state.family[index].accountType,
-                    );
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await Future.delayed(const Duration(seconds: 1));
+                    familyBloc!.add(GetFamily());
                   },
+                  child: ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(15),
+                    itemCount: state.family.length,
+                    itemBuilder: (context, index) {
+                      return FamilyMemberCard(
+                        state.family[index].id,
+                        state.family[index].name,
+                        state.family[index].accountType,
+                      );
+                    },
+                  ),
                 );
-              }
-              else {
+              } else {
                 return const Center(
                   child: Text("Your Family is Empty"),
                 );

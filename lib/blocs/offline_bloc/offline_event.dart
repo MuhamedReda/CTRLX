@@ -7,6 +7,12 @@ class GetOfflineActive extends OfflineEvent{
   
 }
 class GetOffline extends OfflineEvent{
+  
+}
+
+class ChangeOfflineswitchStateEvent extends OfflineEvent{
   final String serial;
-  GetOffline(this.serial);
+  final String pin;
+  final String state;
+  ChangeOfflineswitchStateEvent(this.serial , this.pin , this.state);
 }

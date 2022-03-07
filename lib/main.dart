@@ -1,6 +1,7 @@
 import 'package:ctrlx/blocs/auth_blocs/login/bloc/login_bloc.dart';
 import 'package:ctrlx/blocs/auth_blocs/register/bloc/register_bloc.dart';
 import 'package:ctrlx/blocs/family_bloc/bloc/family_bloc.dart';
+import 'package:ctrlx/blocs/offline_bloc/offline_bloc.dart';
 import 'package:ctrlx/blocs/room_blocs/bloc/room_bloc.dart';
 import 'package:ctrlx/blocs/room_family/roomfamily_bloc.dart';
 import 'package:ctrlx/blocs/switch_bloc/bloc/switch_bloc.dart';
@@ -8,6 +9,7 @@ import 'package:ctrlx/blocs/timer_bloc/timer_bloc.dart';
 import 'package:ctrlx/consts/colors.dart';
 import 'package:ctrlx/data/repositries/Family_repo.dart';
 import 'package:ctrlx/data/repositries/auth_repo.dart';
+import 'package:ctrlx/data/repositries/offline_repo.dart';
 import 'package:ctrlx/data/repositries/rooms_repo.dart';
 import 'package:ctrlx/data/repositries/switches_repo.dart';
 import 'package:ctrlx/data/repositries/timer_repo.dart';
@@ -37,6 +39,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => FamilyBloc(FamilyRepoImplementation())),
         BlocProvider(create: (context) => RoomfamilyBloc(RoomsRepoImplementation())),
         BlocProvider(create: (context) => TimerBloc(TimerRepoImplementation())),
+        BlocProvider(create: (context) => OfflineBloc(OfflineRepoImplementation())),
       ],
       child: MaterialApp(
         title: 'CTRLX',
