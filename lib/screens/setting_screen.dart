@@ -18,6 +18,9 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   bool state = false;
+  String name = "";
+  bool isSub = false;
+  String email = "";
 
   Future changeConection(String connectionType) async {
     setState(() {
@@ -25,6 +28,28 @@ class _SettingScreenState extends State<SettingScreen> {
     });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString("connectionType", connectionType);
+  }
+  
+  @override
+  void initState() {
+    getData();
+    getUser();
+    super.initState();
+  }
+
+  getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isSub = prefs.getString("user_id") != "null" ? true : false;
+    });
+  }
+
+  getData() async {
+   SharedPreferences prefs = await SharedPreferences.getInstance();
+   setState(() {
+     name = prefs.getString("name")!;
+     email = prefs.getString("email")!;
+   });
   }
 
   @override
@@ -54,18 +79,17 @@ class _SettingScreenState extends State<SettingScreen> {
                   const SizedBox(
                     height: 15,
                   ),
-                  const Text(
-                    "Muhamed Reda",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Text(
+                    name,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  const Text("Muhamed.reda@gmail.com"),
+                  Text(email),
                   const SizedBox(
                     height: 15,
                   ),
                   GestureDetector(
                     onTap: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
                       prefs.remove("token");
                       prefs.remove("name");
                       prefs.remove("id");
@@ -77,9 +101,14 @@ class _SettingScreenState extends State<SettingScreen> {
                     },
                     child: GestureDetector(
                       onTap: () async {
-                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
                         prefs.clear();
-                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                            (route) => false);
                       },
                       child: Container(
                         width: 150,
@@ -129,7 +158,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           MaterialPageRoute(
                               builder: (context) => const AddFamilyMember()));
                     },
-                    child: Container(
+                    child: isSub == false ? Container(
                       width: screenWidth(context),
                       height: 40,
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -152,7 +181,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           const Icon(Icons.arrow_right_alt)
                         ],
                       ),
-                    ),
+                    ): const SizedBox(),
                   ),
                   const SizedBox(
                     height: 15,

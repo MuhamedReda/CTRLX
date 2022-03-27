@@ -20,10 +20,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         if(data['access_token'] != null){
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString("token", data['access_token']);
-          prefs.setString("user_name", event.username);
+          prefs.setString("name", event.username);
           prefs.setString("email", event.email);
+          yield RegisterSuccessState();
+        }else{
+          throw Exception("This Email Already Exist");
         }
-        yield RegisterSuccessState();
       }catch(e){
         yield RegisterErorrState(e.toString());
       }

@@ -2,8 +2,11 @@ import 'package:ctrlx/blocs/auth_blocs/register/bloc/register_bloc.dart';
 import 'package:ctrlx/consts/colors.dart';
 import 'package:ctrlx/consts/sizes.dart';
 import 'package:ctrlx/screens/auth/login_screen.dart';
+import 'package:ctrlx/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../root_app.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -59,6 +62,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 );
               },
             );
+          }else{
+            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=> const RootApp()), (route) => false);
           }
         },
         child: SingleChildScrollView(

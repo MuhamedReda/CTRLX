@@ -10,6 +10,7 @@ import 'package:ctrlx/screens/rooms/room_family.dart';
 import 'package:ctrlx/widgets/switch_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class RoomScreen extends StatefulWidget {
@@ -24,17 +25,26 @@ class RoomScreen extends StatefulWidget {
 
 class _RoomScreenState extends State<RoomScreen> {
   SwitchBloc? switchBloc;
+  bool isSub = false;
 
   @override
   void initState() {
     switchBloc = BlocProvider.of<SwitchBloc>(context);
     switchBloc!.add(GetRoomSwitches(widget.id!));
+    getUser();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isSub = prefs.getString("user_id") != "null" ? true : false;
+    });
   }
 
   @override
@@ -44,9 +54,19 @@ class _RoomScreenState extends State<RoomScreen> {
         title: Text(widget.name!),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => RoomFamily(widget.id.toString())));
-          }, icon: const Icon(Icons.person),),
+          isSub == false
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RoomFamily(widget.id.toString()),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.person),
+                )
+              : const SizedBox(),
         ],
       ),
       body: Container(
@@ -55,7 +75,8 @@ class _RoomScreenState extends State<RoomScreen> {
         decoration: BoxDecoration(
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: CachedNetworkImageProvider("http://control-x-co.com/rooms-photos/${widget.img}"),
+            image: CachedNetworkImageProvider(
+                "http://control-x-co.com/rooms-photos/${widget.img}"),
           ),
         ),
         child: Stack(
@@ -69,7 +90,8 @@ class _RoomScreenState extends State<RoomScreen> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 width: screenWidth(context),
-                height: screenHeigh(context) / 3,
+                height: 230,
+                margin: const EdgeInsets.only(bottom: 25),
                 padding: const EdgeInsets.symmetric(vertical: 20),
                 child: BlocBuilder<SwitchBloc, SwitchState>(
                   builder: (context, state) {
@@ -103,9 +125,143 @@ class _RoomScreenState extends State<RoomScreen> {
                       );
                     } else if (state is GetRoomSwitchesLoadedState) {
                       if (state.switches.isNotEmpty) {
+                        return SizedBox(
+                          width: screenWidth(context) - 115,
+                          height: 200,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.switches.length,
+                            itemBuilder: (context, index) {
+                              if (index == state.switches.length - 1) {
+                                return Row(
+                                  children: [
+                                    SwitchCard(
+                                      Colors.white.withOpacity(0.7),
+                                      state.switches[index].name,
+                                      state.switches[index].id,
+                                      state.switches[index].serialNumber,
+                                      state.switches[index].sub1,
+                                      state.switches[index].sub2,
+                                      state.switches[index].sub3,
+                                      state.switches[index].state1,
+                                      state.switches[index].state2,
+                                      state.switches[index].state3,
+                                      widget.id,
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddSwitchForm(
+                                                        widget.id.toString())));
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        height: 200,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white.withOpacity(0.7),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        margin: const EdgeInsets.only(left: 15),
+                                        child: Center(
+                                          child: Container(
+                                            width: 60,
+                                            height: 60,
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  Colors.white.withOpacity(0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            child: const Center(
+                                              child: Icon(Icons.add),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return SwitchCard(
+                                  Colors.white.withOpacity(0.7),
+                                  state.switches[index].name,
+                                  state.switches[index].id,
+                                  state.switches[index].serialNumber,
+                                  state.switches[index].sub1,
+                                  state.switches[index].sub2,
+                                  state.switches[index].sub3,
+                                  state.switches[index].state1,
+                                  state.switches[index].state2,
+                                  state.switches[index].state3,
+                                  widget.id,
+                                );
+                              }
+                            },
+                          ),
+                        );
+                      } else {
                         return Row(
                           children: [
-                            GestureDetector(
+                            isSub == false ? GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddSwitchForm(
+                                            widget.id.toString())));
+                              },
+                              child: Container(
+                                width: 100,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                margin: const EdgeInsets.only(left: 15),
+                                child: Center(
+                                  child: Container(
+                                    width: 60,
+                                    height: 60,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                    child: const Center(
+                                      child: Icon(Icons.add),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ): const SizedBox(),
+                            const Expanded(child: SizedBox()),
+                          ],
+                        );
+                      }
+                    } else if (state is GetRoomErorrState) {
+                      return const Center(
+                        child: Text("Something went wrong"),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+/* GestureDetector(
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(builder: (context) => AddSwitchForm(widget.id.toString())));
                               },
@@ -132,49 +288,4 @@ class _RoomScreenState extends State<RoomScreen> {
                                   ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              width: screenWidth(context) - 115,
-                              height: 200,
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: state.switches.length,
-                                itemBuilder: (context, index) {
-                                  return SwitchCard(
-                                    Colors.white.withOpacity(0.7),
-                                    state.switches[index].name,
-                                    state.switches[index].id,
-                                    state.switches[index].serialNumber,
-                                    state.switches[index].sub1,
-                                    state.switches[index].sub2,
-                                    state.switches[index].sub3,
-                                    state.switches[index].state1,
-                                    state.switches[index].state2,
-                                    state.switches[index].state3,
-                                    widget.id,
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return const SizedBox();
-                      }
-                    } else if (state is GetRoomErorrState) {
-                      return const Center(
-                        child: Text("Something went wrong"),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+                            ), */

@@ -1,5 +1,4 @@
 import 'package:ctrlx/consts/colors.dart';
-import 'package:ctrlx/screens/auth/login_screen.dart';
 import 'package:ctrlx/screens/family/family_screen.dart';
 import 'package:ctrlx/screens/home_screen.dart';
 import 'package:ctrlx/screens/rooms/rooms_screen.dart';
@@ -25,8 +24,8 @@ class _RootAppState extends State<RootApp> with TickerProviderStateMixin {
       'name': 'Home'
     },
     {
-      "icon": "assets/icons/chat.svg",
-      "active_icon": "assets/icons/chat.svg",
+      "icon": "assets/icons/bed.svg",
+      "active_icon": "assets/icons/bed.svg",
       "page": const RoomsScreen(),
       'name': 'Rooms'
     },

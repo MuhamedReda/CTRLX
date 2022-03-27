@@ -16,7 +16,7 @@ abstract class FamilyRepo {
 class FamilyRepoImplementation extends FamilyRepo{
   @override
   Future addFamilyMember(String email , String password , String name,) async {
-    var url = "http://www.control-x-co.com/api/SubUsers";
+    var url = "https://www.control-x-co.com/api/SubUsers";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http.post(Uri.parse(url) , headers: {
@@ -32,7 +32,7 @@ class FamilyRepoImplementation extends FamilyRepo{
 
   @override
   Future deleteFamilyMember(int id) async{
-    var url = "http://www.control-x-co.com/api/SubUsers/$id";
+    var url = "https://www.control-x-co.com/api/SubUsers/$id";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http.delete(Uri.parse(url) , headers: {
@@ -42,7 +42,7 @@ class FamilyRepoImplementation extends FamilyRepo{
 
   @override
   Future<List<FamilyMember>> getAllFamily() async {
-    var url = "http://www.control-x-co.com/api/SubUsers";
+    var url = "https://www.control-x-co.com/api/SubUsers";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     var response = await http.get(Uri.parse(url) , headers: {

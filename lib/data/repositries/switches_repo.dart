@@ -20,7 +20,7 @@ class SwitchesRepoImplementation extends SwitchRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     var data =await http.post(
-      Uri.parse("http://control-x-co.com/api/AttachSwitchToRoom"),
+      Uri.parse("https://control-x-co.com/api/AttachSwitchToRoom"),
       body:{
         'room_id' : roomId,
         'serial' : serial,
@@ -47,7 +47,7 @@ class SwitchesRepoImplementation extends SwitchRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     http.Response response = await http.get(
-      Uri.parse("http://control-x-co.com/api/GetRoomSwitches/$roomId"),
+      Uri.parse("https://control-x-co.com/api/GetRoomSwitches/$roomId"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
@@ -60,7 +60,7 @@ class SwitchesRepoImplementation extends SwitchRepo {
   Future changeState(String? statename, int? currentState , String? serial) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
-    String url = "http://control-x-co.com/api/${currentState == 0 ? 'on' : 'off'}/$serial?state=$statename";
+    String url = "https://control-x-co.com/api/${currentState == 0 ? 'on' : 'off'}/$serial?state=$statename";
     await http.get(
       Uri.parse(url),
       headers: {
@@ -74,7 +74,7 @@ class SwitchesRepoImplementation extends SwitchRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     http.Response response = await http.get(
-      Uri.parse("http://control-x-co.com/api/GetActivatedSwitch"),
+      Uri.parse("https://control-x-co.com/api/GetActivatedSwitch"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
@@ -88,7 +88,7 @@ class SwitchesRepoImplementation extends SwitchRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     http.Response response = await http.get(
-      Uri.parse("http://control-x-co.com/api/switches"),
+      Uri.parse("https://control-x-co.com/api/switches"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },

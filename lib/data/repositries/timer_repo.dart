@@ -17,7 +17,7 @@ class TimerRepoImplementation extends TimerRepo{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http.delete(
-      Uri.parse("http://control-x-co.com/api/DeleteTimer/$timerId"),
+      Uri.parse("https://control-x-co.com/api/DeleteTimer/$timerId"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
@@ -29,7 +29,7 @@ class TimerRepoImplementation extends TimerRepo{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     http.Response response = await http.get(
-      Uri.parse("http://control-x-co.com/api/GetTimer/$switchId"),
+      Uri.parse("https://control-x-co.com/api/GetTimer/$switchId"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
@@ -43,7 +43,7 @@ class TimerRepoImplementation extends TimerRepo{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http.post(
-      Uri.parse("http://control-x-co.com/api/SetTimer"),
+      Uri.parse("https://control-x-co.com/api/SetTimer"),
       body:{
         'time' : time,
         'switch_id' : switchId,

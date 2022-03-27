@@ -111,7 +111,7 @@ class _SwitchCardState extends State<SwitchCard> {
                                             context: context,
                                             builder: (context) {
                                               return SizedBox(
-                                                height: 250,
+                                                height: 300,
                                                 child: Column(
                                                   children: [
                                                     const SizedBox(
@@ -252,7 +252,7 @@ class _SwitchCardState extends State<SwitchCard> {
                         width: 60,
                         height: 60,
                         decoration: BoxDecoration(
-                            color: s1 == 0 ? Colors.grey.shade200 : myColor,
+                            color: s1 == 0 ? Colors.white.withOpacity(0.5) : myColor,
                             borderRadius: BorderRadius.circular(100)),
                         child: Center(
                           child: Text(
@@ -291,7 +291,7 @@ class _SwitchCardState extends State<SwitchCard> {
                               height: 60,
                               decoration: BoxDecoration(
                                   color:
-                                      s2 == 0 ? Colors.grey.shade200 : myColor,
+                                      s2 == 0 ? Colors.white.withOpacity(0.5) : myColor,
                                   borderRadius: BorderRadius.circular(100)),
                               child: Center(
                                 child: Text(
@@ -333,7 +333,7 @@ class _SwitchCardState extends State<SwitchCard> {
                               height: 60,
                               decoration: BoxDecoration(
                                   color:
-                                      s3 == 0 ? Colors.grey.shade200 : myColor,
+                                      s3 == 0 ? Colors.white.withOpacity(0.5) : myColor,
                                   borderRadius: BorderRadius.circular(100)),
                               child: Center(
                                 child: Text(

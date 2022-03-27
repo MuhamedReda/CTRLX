@@ -3,6 +3,7 @@ import 'package:ctrlx/consts/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FamilyMemberCard extends StatefulWidget {
   final String? name;
@@ -17,11 +18,17 @@ class FamilyMemberCard extends StatefulWidget {
 class _FamilyMemberCardState extends State<FamilyMemberCard> {
   
   FamilyBloc? familyBloc;
-
+  bool isSub = false;
   @override
   void initState() {
     familyBloc = BlocProvider.of<FamilyBloc>(context);
     super.initState();
+  }
+  getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isSub = prefs.getString("user_id") != "null" ? true : false;
+    });
   }
   
   @override
@@ -46,7 +53,7 @@ class _FamilyMemberCardState extends State<FamilyMemberCard> {
           padding: const EdgeInsets.all(10),
           child: SvgPicture.asset("assets/icons/profile.svg"),
         ),
-        trailing: IconButton(
+        trailing: isSub == false ? IconButton(
           onPressed: () {
             showDialog(
               context: context,
@@ -54,7 +61,7 @@ class _FamilyMemberCardState extends State<FamilyMemberCard> {
               builder: (context) {
                 return AlertDialog(
                   title: const Text(
-                    "Are You Sure To Delete Room name ?",
+                    "Are You Sure To Delete This Member ?",
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -81,7 +88,7 @@ class _FamilyMemberCardState extends State<FamilyMemberCard> {
             image: AssetImage("assets/icons/delete.png"),
             width: 20,
           ),
-        ),
+        ): const SizedBox(),
       ),
     );
   }

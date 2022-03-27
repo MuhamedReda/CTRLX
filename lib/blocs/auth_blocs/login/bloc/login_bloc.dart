@@ -25,7 +25,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           prefs.setString("token", data['token']);
           prefs.setString("name", data['user_name']);
+          prefs.setString("email", event.email);
           prefs.setString("id", data['id'].toString());
+          prefs.setString("user_id", data['user_id'].toString());
         }
         yield LoginSuccessgState();
       }on SocketException {

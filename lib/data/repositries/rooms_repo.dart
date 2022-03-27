@@ -26,7 +26,7 @@ class RoomsRepoImplementation extends RoomsRepo {
     MultipartFile image = await MultipartFile.fromFile(img.path);
     FormData data = FormData.fromMap({'name': name, 'photo_link': image});
     await Dio().post(
-      "http://control-x-co.com/api/rooms",
+      "https://control-x-co.com/api/rooms",
       data: data,
       options: Options(
         headers: {
@@ -41,7 +41,7 @@ class RoomsRepoImplementation extends RoomsRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http
-        .delete(Uri.parse("http://control-x-co.com/api/rooms/$id"), headers: {
+        .delete(Uri.parse("https://control-x-co.com/api/rooms/$id"), headers: {
       HttpHeaders.authorizationHeader: "Bearer $token",
     });
   }
@@ -51,7 +51,7 @@ class RoomsRepoImplementation extends RoomsRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     var roomResponse = await http
-        .get(Uri.parse("http://control-x-co.com/api/rooms"), headers: {
+        .get(Uri.parse("https://control-x-co.com/api/rooms"), headers: {
       HttpHeaders.authorizationHeader: "Bearer $token",
     });
     var data = convert.jsonDecode(roomResponse.body);
@@ -63,7 +63,7 @@ class RoomsRepoImplementation extends RoomsRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     var roomFamilyResponse = await http
-        .get(Uri.parse("http://control-x-co.com/api/GetRoomUsers/$id"), headers: {
+        .get(Uri.parse("https://control-x-co.com/api/GetRoomUsers/$id"), headers: {
       HttpHeaders.authorizationHeader: "Bearer $token",
     });
     var data = convert.jsonDecode(roomFamilyResponse.body);
@@ -77,7 +77,7 @@ class RoomsRepoImplementation extends RoomsRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http.post(
-      Uri.parse("http://control-x-co.com/api/AttachRoomToUser"),
+      Uri.parse("https://control-x-co.com/api/AttachRoomToUser"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
@@ -93,7 +93,7 @@ class RoomsRepoImplementation extends RoomsRepo {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     await http.post(
-      Uri.parse("http://control-x-co.com/api/AttachRoomToUser"),
+      Uri.parse("https://control-x-co.com/api/AttachRoomToUser"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },

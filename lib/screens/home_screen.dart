@@ -7,11 +7,13 @@ import 'package:ctrlx/consts/colors.dart';
 import 'package:ctrlx/consts/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 import '../widgets/switch_card.dart';
+import 'auth/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -27,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   SwitchBloc? switchBloc;
   RoomBloc? roomBloc;
   FamilyBloc? familyBloc;
+  String? userName;
   @override
   void initState() {
     switchBloc = BlocProvider.of<SwitchBloc>(context);
@@ -36,14 +39,22 @@ class _HomeScreenState extends State<HomeScreen> {
     familyBloc = BlocProvider.of<FamilyBloc>(context);
     familyBloc!.add(GetFamily());
     allSwitches();
+    getUserDate();
     super.initState();
+  }
+
+  getUserDate() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userName = prefs.getString("name");
+    });
   }
 
   allSwitches() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString("token");
     http.Response response = await http.get(
-      Uri.parse("http://control-x-co.com/api/switches"),
+      Uri.parse("https://control-x-co.com/api/switches"),
       headers: {
         HttpHeaders.authorizationHeader: "Bearer $token",
       },
@@ -74,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               const SizedBox(
-                height: 50,
+                height: 70,
               ),
               Container(
                 width: screenWidth(context),
@@ -84,25 +95,40 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text("Welcome ,"),
-                        Text(
-                          "Muhamed Reda",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                      children: [
+                        Row(
+                          children: [
+                            const Text("Welcome ,"),
+                            Text(
+                              userName!,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
+                        const Text("Let's Control Your Smart Home !")
                       ],
                     ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: myColor.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: const Center(
-                        child: Icon(Icons.settings),
+                    GestureDetector(
+                      onTap: () async {
+                        SharedPreferences prefs = await SharedPreferences.getInstance();
+                        prefs.clear();
+                        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+                      },
+                      child: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: myColor.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Center(
+                          child: SvgPicture.asset(
+                            "assets/icons/logout.svg",
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -243,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (state is GetActiveSwitchesLoadingState) {
                         return SizedBox(
                           width: screenWidth(context),
-                          height: 200,
+                          height: 300,
                           child: Center(
                             child: Shimmer.fromColors(
                                 child: const Text(

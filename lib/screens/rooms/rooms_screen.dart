@@ -5,6 +5,7 @@ import 'package:ctrlx/widgets/room_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class RoomsScreen extends StatefulWidget {
@@ -16,16 +17,25 @@ class RoomsScreen extends StatefulWidget {
 
 class _RoomsScreenState extends State<RoomsScreen> {
   RoomBloc? roomBloc;
+  bool isSub = false;
   @override
   void initState() {
     roomBloc = BlocProvider.of<RoomBloc>(context);
     roomBloc!.add(GetRooms());
+    getUser();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isSub = prefs.getString("user_id") != "null" ? true : false;
+    });
   }
 
   @override
@@ -86,14 +96,14 @@ class _RoomsScreenState extends State<RoomsScreen> {
             backgroundColor: myColor,
             centerTitle: true,
           ),
-          floatingActionButton: FloatingActionButton(
+          floatingActionButton: isSub == false ? FloatingActionButton(
             onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => const AddRoomScreen()));
             },
             child: const Icon(Icons.add),
             backgroundColor: myColor,
-          ),
+          ): const SizedBox(),
           body: BlocBuilder<RoomBloc, RoomState>(
             builder: (context, state) {
               if (state is GetRoomLoadingState) {

@@ -4,6 +4,7 @@ import 'package:ctrlx/screens/family/add_family.dart';
 import 'package:ctrlx/widgets/family_member_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FamilyScreen extends StatefulWidget {
@@ -15,12 +16,21 @@ class FamilyScreen extends StatefulWidget {
 
 class _FamilyScreenState extends State<FamilyScreen> {
   FamilyBloc? familyBloc;
+  bool isSub = false;
 
   @override
   void initState() {
     familyBloc = BlocProvider.of<FamilyBloc>(context);
     familyBloc!.add(GetFamily());
+    getUser();
     super.initState();
+  }
+
+  getUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isSub = prefs.getString("user_id") != "null" ? true : false;
+    });
   }
 
   @override
@@ -69,7 +79,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
           title: const Text("Family Members"),
           centerTitle: true,
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: isSub == false ? FloatingActionButton(
           onPressed: () {
             Navigator.push(
                 context,
@@ -78,7 +88,7 @@ class _FamilyScreenState extends State<FamilyScreen> {
           },
           child: const Icon(Icons.add),
           backgroundColor: myColor,
-        ),
+        ): const SizedBox(),
         body: BlocBuilder<FamilyBloc, FamilyState>(
           builder: (context, state) {
             if (state is GetFamilyLoading) {
